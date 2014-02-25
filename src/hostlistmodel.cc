@@ -166,10 +166,12 @@ private:
 void HostListModel::removeNodeById(unsigned int hostId)
 {
     QVector<HostInfo>::iterator it = std::find_if(m_hostInfos.begin(), m_hostInfos.end(), find_hostid(hostId));
-    int index = std::distance(m_hostInfos.begin(), it);
-    beginRemoveRows(QModelIndex(), index, index);
-    m_hostInfos.erase(it);
-    endRemoveRows();
+    if (it != m_hostInfos.end()) {
+        int index = std::distance(m_hostInfos.begin(), it);
+        beginRemoveRows(QModelIndex(), index, index);
+        m_hostInfos.erase(it);
+        endRemoveRows();
+    }
 }
 
 void HostListModel::clear()
