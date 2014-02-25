@@ -97,6 +97,8 @@ void FlowTableView::update(const Job &job)
     int serverRow = m_idToRowMap.value(serverId);
     QTableWidgetItem *fileNameItem = item(serverRow, 1);
     QTableWidgetItem *jobStateItem = item(serverRow, 3);
+    if (!fileNameItem || !jobStateItem)
+        return;
 
     if (job.state() == Job::Finished) {
         fileNameItem->setText("");
