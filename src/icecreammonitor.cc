@@ -114,7 +114,8 @@ void IcecreamMonitor::slotCheckScheduler()
         if (!m_discover
             || m_discover->timed_out()) {
             delete m_discover;
-            m_discover = new DiscoverSched ( m_current_netname.data() );
+            const char *schedName = getenv("ICECC_SCHEDULER");
+            m_discover = new DiscoverSched ( m_current_netname.data(), 2000, schedName ? schedName : "" );
         }
 
         m_scheduler = m_discover->try_get_scheduler ();
