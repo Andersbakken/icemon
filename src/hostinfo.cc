@@ -131,6 +131,19 @@ void HostInfo::updateFromStatsMap( const StatsMap &stats )
 
 QColor HostInfo::createColor( const QString &name )
 {
+    if (const char *color = getenv("ICECC_COLORS")) {
+        const QString str = QString::fromLatin1(color);
+        const QStringList hosts = str.split(",");
+        QRegExp rx("([^:]*):(.*)$");
+        foreach(const QString &host, hosts) {
+            if (rx.exactMatch(host) && rx.cap(1) == name) {
+                const QColor col(rx.cap(2));
+                if (col.isValid()) {
+                    return col;
+                }
+            }
+        }
+    }
     unsigned long h = 0;
     unsigned long g;
     int ch;
@@ -226,7 +239,7 @@ QColor HostInfoManager::hostColor( unsigned int id ) const
     HostInfo *hostInfo = find( id );
     if ( hostInfo ) {
         QColor tmp = hostInfo->color();
-        assert( tmp.isValid() && ( tmp.red() + tmp.green() + tmp.blue() ));
+        assert( tmp.isValid() );
         return tmp;
     }
   }
